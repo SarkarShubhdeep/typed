@@ -1,8 +1,23 @@
 import Image from "next/image";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
     return (
         <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+            {/* Draggable title bar area for frameless window */}
+            <div 
+                className="fixed top-0 left-0 right-0 h-12 z-50"
+                style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+            />
+            
+            {/* Theme toggle in top right */}
+            <div 
+                className="absolute top-4 right-4 z-50"
+                style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+            >
+                <ThemeToggle />
+            </div>
+
             <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
                 <Image
                     className="dark:invert"
