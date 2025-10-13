@@ -1,0 +1,23 @@
+{
+  "appId": "com.typed.app",
+  "productName": "Typed",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "electron/**/*",
+    "out/**/*",
+    "package.json"
+  ],
+  "mac": {
+    "target": "dmg",
+    "category": "public.app-category.productivity"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Utility"
+  }
+}
