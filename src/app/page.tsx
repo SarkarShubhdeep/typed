@@ -28,8 +28,8 @@ export default function Home() {
             {/* Scrollable Content Area */}
             <main className="flex-1 overflow-auto pt-[174px] pb-24">
                 {/* Content goes here */}
-                <div className="grid grid-cols-3 max-w-6xl mx-auto  px-4">
-                    {Array.from({ length: 12 }, (_, i) => (
+                <div className="grid grid-cols-3 max-w-6xl mx-auto gap-2  px-4">
+                    {Array.from({ length: 13 }, (_, i) => (
                         <DocumentCard
                             key={i}
                             title={`Document ${i + 1}`}

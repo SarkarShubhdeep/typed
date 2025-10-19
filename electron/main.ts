@@ -23,10 +23,13 @@ function createWindow() {
         // Frameless window for clean interface
         titleBarStyle: "hidden", // Mac: hides title bar but keeps traffic lights
         frame: process.platform !== "darwin", // Windows/Linux: remove frame entirely
-        titleBarOverlay: process.platform === "win32" ? {
-            color: "#00000000", // Transparent
-            symbolColor: "#ffffff",
-        } : undefined,
+        titleBarOverlay:
+            process.platform === "win32"
+                ? {
+                      color: "#00000000", // Transparent
+                      symbolColor: "#ffffff",
+                  }
+                : undefined,
 
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
