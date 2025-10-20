@@ -52,6 +52,7 @@ export function ThemeToggle() {
             size="icon"
             onClick={cycleTheme}
             title={`Current theme: ${theme}. Click or press Shift+Cmd+L to cycle.`}
+            className="rounded-full"
         >
             {theme === "light" && <Sun className="transition-all" />}
             {theme === "dark" && <Moon className="transition-all" />}
