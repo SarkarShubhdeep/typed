@@ -1,10 +1,21 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Navbar from "../components/navbar";
 import DocumentCard from "../components/ui/document-card";
 import CustomScrollbar from "../components/custom-scrollbar";
 import { ProgressiveBlur } from "../components/ui/progressive-blur";
+import { DocumentsTableView } from "../components/documents/documents-table-view";
+import { ViewMode } from "../types/view";
+import { Table } from "@tanstack/react-table";
+import { Document } from "../types/document";
 
 export default function Home() {
+    const [view, setView] = useState<ViewMode>("grid");
+    const [tableInstance, setTableInstance] = useState<Table<Document> | null>(
+        null
+    );
     return (
         <div className="h-screen flex flex-col">
             {/* Fixed Header */}
@@ -22,21 +33,33 @@ export default function Home() {
                 </div>
 
                 {/* Navigation Bar */}
-                <Navbar />
+                <Navbar
+                    view={view}
+                    onViewChange={setView}
+                    tableInstance={tableInstance}
+                />
             </header>
 
             {/* Scrollable Content Area */}
-            <main className="flex-1 overflow-auto pt-[174px] pb-24">
+            <main className="flex-1 overflow-auto pt-[230px] pb-24">
                 {/* Content goes here */}
-                <div className="grid grid-cols-3 max-w-6xl mx-auto gap-2  px-4">
-                    {Array.from({ length: 13 }, (_, i) => (
-                        <DocumentCard
-                            key={i}
-                            title={`Document ${i + 1}`}
-                            description={`Description for document ${i + 1}`}
-                        />
-                    ))}
-                </div>
+                {view === "grid" ? (
+                    <div className="grid grid-cols-3 max-w-6xl mx-auto gap-2  px-4">
+                        {Array.from({ length: 13 }, (_, i) => (
+                            <DocumentCard
+                                key={i}
+                                title={`Document ${i + 1}`}
+                                description={`Description for document ${
+                                    i + 1
+                                }`}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="max-w-6xl mx-auto">
+                        <DocumentsTableView onTableReady={setTableInstance} />
+                    </div>
+                )}
             </main>
 
             {/* Custom Scrollbar */}
