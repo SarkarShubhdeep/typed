@@ -10,6 +10,7 @@ import { DocumentsTableView } from "../components/documents/documents-table-view
 import { ViewMode } from "../types/view";
 import { Table } from "@tanstack/react-table";
 import { Document } from "../types/document";
+import { staticDocuments } from "../data/documents";
 
 export default function Home() {
     const [view, setView] = useState<ViewMode>("grid");
@@ -45,13 +46,14 @@ export default function Home() {
                 {/* Content goes here */}
                 {view === "grid" ? (
                     <div className="grid grid-cols-3 max-w-6xl mx-auto gap-2  px-4">
-                        {Array.from({ length: 13 }, (_, i) => (
+                        {staticDocuments.map((doc) => (
                             <DocumentCard
-                                key={i}
-                                title={`Document ${i + 1}`}
-                                description={`Description for document ${
-                                    i + 1
-                                }`}
+                                key={doc.id}
+                                id={doc.id}
+                                title={doc.title}
+                                description={doc.description}
+                                createdAt={doc.createdAt}
+                                lastModified={doc.lastModified}
                             />
                         ))}
                     </div>
