@@ -7,10 +7,6 @@ import {
     MoreHorizontal,
     Grid2X2,
     List,
-    ArrowUpDown,
-    ArrowUp,
-    MoveUp,
-    MoveDown,
 } from "lucide-react";
 import { ViewMode } from "../types/view";
 import { TableHeaderRow } from "./documents/table-header-row";

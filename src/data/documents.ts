@@ -105,4 +105,12 @@ export const staticDocuments: Document[] = [
         createdAt: new Date(2024, 9, 2, 9, 45),
         lastModified: new Date(2024, 9, 8, 13, 0),
     },
+    {
+        id: "14",
+        title: "Team Retrospective Notes",
+        description:
+            "Key takeaways and action items from our monthly team retrospective meeting.",
+        createdAt: new Date(2024, 9, 1, 14, 15),
+        lastModified: new Date(2024, 9, 6, 16, 40),
+    },
 ];
