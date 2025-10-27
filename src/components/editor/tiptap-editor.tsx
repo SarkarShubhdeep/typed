@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
 import { forwardRef, useImperativeHandle } from "react";
 
 interface TiptapEditorProps {
@@ -30,7 +31,12 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
         ref
     ) => {
         const editor = useEditor({
-            extensions: [StarterKit],
+            extensions: [
+                StarterKit,
+                Placeholder.configure({
+                    placeholder: "Start typing...",
+                }),
+            ],
             content: content || "<p></p>",
             // Don't render immediately on the server to avoid SSR issues
             immediatelyRender: false,
@@ -45,7 +51,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
                     onCharacterCountChange(characterCount);
                 }
 
-                // Maintain cursor at fixed position from bottom (80px)
+                // Maintain cursor at fixed position for all modes
                 if (containerRef?.current) {
                     requestAnimationFrame(() => {
                         const container = containerRef.current;
@@ -57,16 +63,18 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
 
                         const range = selection.getRangeAt(0);
                         const rect = range.getBoundingClientRect();
-                        
-                        // Target position: 80px from bottom of viewport
-                        const targetFromBottom = 80;
+
+                        // Keep cursor at target position from bottom
+                        const targetFromBottom = 350; // Distance from bottom to maintain
                         const viewportHeight = window.innerHeight;
                         const targetTop = viewportHeight - targetFromBottom;
-                        
-                        // Calculate how much to scroll
                         const cursorTop = rect.top;
+
+                        // Calculate how much to scroll
                         const scrollAdjustment = cursorTop - targetTop;
-                        
+
+                        // Scroll up when cursor goes below target position
+                        // This creates typewriter effect - content scrolls up as you type
                         if (scrollAdjustment > 0) {
                             container.scrollTop += scrollAdjustment;
                         }
@@ -81,7 +89,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
             },
             editorProps: {
                 attributes: {
-                    class: "prose dark:prose-invert max-w-none focus:outline-none",
+                    class: "tiptap prose dark:prose-invert max-w-none focus:outline-none",
                 },
             },
         });
@@ -100,7 +108,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
                 case "large":
                     return "text-2xl leading-10";
                 case "line":
-                    return "text-5xl leading-20";
+                    return "text-5xl leading-[1.5]";
                 default:
                     return "text-base";
             }
@@ -108,7 +116,7 @@ const TiptapEditor = forwardRef<TiptapEditorHandle, TiptapEditorProps>(
 
         return (
             <div
-                className={`w-full transition-all h-full ${getFontSizeClass()}`}
+                className={`transition-all w-full h-full ${getFontSizeClass()}`}
                 style={{ fontFamily: font }}
             >
                 <EditorContent editor={editor} className="w-full h-full" />
