@@ -7,7 +7,6 @@ import { ChevronLeft } from "lucide-react";
 import { Document } from "../../types/document";
 import { ProgressiveBlur } from "../ui/progressive-blur";
 import { ThemeToggle } from "../theme-toggle";
-import { Kbd, KbdGroup } from "../ui/kbd";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import {
     Select,
@@ -31,6 +30,7 @@ export default function DocumentView({ document }: DocumentViewProps) {
     const [font, setFont] = useState<string>("Times New Roman");
     const [content, setContent] = useState<string>("");
     const [characterCount, setCharacterCount] = useState<number>(0);
+    const [isUIVisible, setIsUIVisible] = useState<boolean>(true);
     const editorRef = useRef<TiptapEditorHandle>(null);
     const containerRef = useRef<HTMLElement>(null);
 
@@ -44,7 +44,7 @@ export default function DocumentView({ document }: DocumentViewProps) {
         });
     };
 
-    // Keyboard shortcut handler for font size toggle
+    // Keyboard shortcut handlers
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Cmd/Ctrl + Shift + T to toggle font size
@@ -55,6 +55,11 @@ export default function DocumentView({ document }: DocumentViewProps) {
                     if (current === "large") return "line";
                     return "small";
                 });
+            }
+            // Cmd/Ctrl + \ to toggle UI visibility
+            if ((e.metaKey || e.ctrlKey) && e.key === "\\") {
+                e.preventDefault();
+                setIsUIVisible((current) => !current);
             }
         };
 
@@ -81,7 +86,14 @@ export default function DocumentView({ document }: DocumentViewProps) {
         <div className="h-screen flex flex-col">
             <ProgressiveBlur position="top" height="80px" />
 
-            <div className="fixed top-20 z-40 px-10 w-full flex justify-between items-start">
+            {/* UI Options */}
+            <div
+                className={`fixed top-10 z-40 px-5 w-full flex justify-between items-start transition-all duration-300 ${
+                    isUIVisible
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 -translate-y-4 pointer-events-none"
+                }`}
+            >
                 {/* left side options */}
                 <div className="flex flex-col items-start w-xs gap-2 bg-background/50 backdrop-blur-sm p-4 rounded-xl border shadow-lg">
                     <Button
@@ -181,23 +193,23 @@ export default function DocumentView({ document }: DocumentViewProps) {
                 className="h-full flex flex-col overflow-auto scroll-smooth relative"
                 onClick={handlePageClick}
             >
-                {/* Adaptive Top padding */}
+                {/* All modes: same vertical layout, different padding */}
                 <div className="flex-1 max-h-200 min-h-20 transition-all" />
-
-                {/* Main editor */}
-                <div className="max-w-4xl w-full mx-auto px-4 py-4 flex-1 transition-all">
+                <div className={`w-full mx-auto py-4 flex-1 transition-all ${
+                    fontSize === "line" ? "max-w-full px-8" : "max-w-4xl px-4"
+                }`}>
                     <TiptapEditor
                         ref={editorRef}
                         content={content}
                         onChange={handleContentChange}
-                        onCharacterCountChange={handleCharacterCountChange}
+                        onCharacterCountChange={
+                            handleCharacterCountChange
+                        }
                         fontSize={fontSize}
                         font={font}
                         containerRef={containerRef}
                     />
                 </div>
-
-                {/* Adaptive Bottom padding */}
                 <div className="flex-1 min-h-[40vh] transition-all" />
 
                 {/* Character Count - Bottom Left */}
