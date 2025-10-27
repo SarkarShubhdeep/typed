@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Share } from "lucide-react";
 import { Document } from "../../types/document";
 import { ProgressiveBlur } from "../ui/progressive-blur";
 import { ThemeToggle } from "../theme-toggle";
@@ -33,16 +33,6 @@ export default function DocumentView({ document }: DocumentViewProps) {
     const [isUIVisible, setIsUIVisible] = useState<boolean>(true);
     const editorRef = useRef<TiptapEditorHandle>(null);
     const containerRef = useRef<HTMLElement>(null);
-
-    const formatDate = (date: Date) => {
-        return date.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
 
     // Keyboard shortcut handlers
     useEffect(() => {
@@ -94,11 +84,20 @@ export default function DocumentView({ document }: DocumentViewProps) {
             >
                 <ProgressiveBlur position="top" height="140px" />
 
-                <h1 className="text-2xl font-semibold max-w-80 z-50">
-                    {document.title}
-                </h1>
+                <div className="flex min-w-2xl px-2 justify-between gap-2 z-50">
+                    <h1 className="text-2xl font-semibold max-w-80 ">
+                        {document.title}
+                    </h1>
+                    <Button
+                        variant="secondary"
+                        size="icon"
+                        className="rounded-full shadow-xl border"
+                    >
+                        <Share />
+                    </Button>
+                </div>
                 {/* UI options */}
-                <div className="flex items-center justify-between h-14 gap-4 p-3 bg-background rounded-full max-w-6xl mx-auto border z-50 shadow-xl">
+                <div className="flex items-center justify-between h-14 gap-4 p-2 bg-background rounded-full max-w-6xl min-w-2xl mx-auto border z-50 shadow-xl">
                     {/* Theme and Font Size */}
                     <div className="flex items-center gap-2  rounded-full">
                         <Button
